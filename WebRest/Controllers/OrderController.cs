@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,47 +14,48 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.ConstrainedExecution;
 using WebRestShared.DTO;
 namespace WebRest.Controllers
+
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddressController : ControllerBase, iController<Address, AddressDTO>
+    public class OrderController : ControllerBase, iController<Order, OrderDTO>
     {
         private readonly WebRestOracleContext _context;
         private readonly IMapper _mapper;
 
-        public AddressController(WebRestOracleContext context,
+        public OrderController(WebRestOracleContext context,
             IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            // _context.LoggedInUserId = "XYZ";
+           // _context.LoggedInUserId = "XYZ";
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Address>>> Get()
+        public async Task<ActionResult<IEnumerable<Order>>> Get()
         {
-            return await _context.Addresses.ToListAsync();
+            return await _context.Orders.ToListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Address>> Get(string id)
+        public async Task<ActionResult<Order>> Get(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
+            var order = await _context.Orders.FindAsync(id);
 
-            if (address == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return address;
+            return order;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, AddressDTO _addressDTO)
+        public async Task<IActionResult> Put(string id, OrderDTO _orderDTO)
         {
 
-            if (id != _addressDTO.AddressId)
+            if (id != _orderDTO.OrderId)
             {
                 return BadRequest();
             }
@@ -66,8 +67,8 @@ namespace WebRest.Controllers
                 //_context.SetUserID(_context.LoggedInUserId);
 
                 //  POJO code goes here                
-                var _item = _mapper.Map<Address>(_addressDTO);
-                _context.Addresses.Update(_item);
+                var _item = _mapper.Map<Order>(_orderDTO);
+                _context.Orders.Update(_item);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -83,7 +84,7 @@ namespace WebRest.Controllers
                         throw;
                     }
                 }
-
+                
                 await transaction.CommitAsync();
             }
             catch (Exception e)
@@ -97,27 +98,27 @@ namespace WebRest.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Address>> Post(AddressDTO _addressDTO)
+        public async Task<ActionResult<Order>> Post(OrderDTO _orderDTO)
         {
-            Address _item = _mapper.Map<Address>(_addressDTO);
-            _item.AddressId = null;      //  Force a new PK to be created
-            _context.Addresses.Add(_item);
+            Order _item = _mapper.Map<Order>(_orderDTO);
+            _item = null;      //  Force a new PK to be created
+            _context.Orders.Add(_item);
             await _context.SaveChangesAsync();
 
-            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.AddressId }, _item);
+            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.OrdersId }, _item);
             return Ok(ret);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            _context.Addresses.Remove(address);
+            _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -125,7 +126,7 @@ namespace WebRest.Controllers
 
         private bool Exists(string id)
         {
-            return _context.Addresses.Any(e => e.AddressId == id);
+            return _context.Orders.Any(e => e.OrdersId == id);
         }
 
 

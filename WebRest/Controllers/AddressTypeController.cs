@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,12 +17,12 @@ namespace WebRest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GendersController : ControllerBase, iController<Gender, GenderDTO>
+    public class AddressTypeController : ControllerBase, iController<AddressType, AddressTypeDTO>
     {
         private readonly WebRestOracleContext _context;
         private readonly IMapper _mapper;
 
-        public GendersController(WebRestOracleContext context,
+        public AddressTypeController(WebRestOracleContext context,
             IMapper mapper)
         {
             _context = context;
@@ -31,30 +31,30 @@ namespace WebRest.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gender>>> Get()
+        public async Task<ActionResult<IEnumerable<AddressType>>> Get()
         {
-            return await _context.Genders.ToListAsync();
+            return await _context.AddressTypes.ToListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Gender>> Get(string id)
+        public async Task<ActionResult<AddressType>> Get(string id)
         {
-            var gender = await _context.Genders.FindAsync(id);
+            var addressType = await _context.AddressTypes.FindAsync(id);
 
-            if (gender == null)
+            if (addressType == null)
             {
                 return NotFound();
             }
 
-            return gender;
+            return addressType;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, GenderDTO _genderDTO)
+        public async Task<IActionResult> Put(string id, AddressTypeDTO _addressTypeDTO)
         {
 
-            if (id != _genderDTO.GenderId)
+            if (id != _addressTypeDTO.AddressTypeId)
             {
                 return BadRequest();
             }
@@ -66,8 +66,8 @@ namespace WebRest.Controllers
                 //_context.SetUserID(_context.LoggedInUserId);
 
                 //  POJO code goes here                
-                var _item = _mapper.Map<Gender>(_genderDTO);
-                _context.Genders.Update(_item);
+                var _item = _mapper.Map<AddressType>(_addressTypeDTO);
+                _context.AddressTypes.Update(_item);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -97,27 +97,27 @@ namespace WebRest.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Gender>> Post(GenderDTO _genderDTO)
+        public async Task<ActionResult<AddressType>> Post(AddressTypeDTO _addressTypeDTO)
         {
-            Gender _item = _mapper.Map<Gender>(_genderDTO);
-            _item.GenderId = null;      //  Force a new PK to be created
-            _context.Genders.Add(_item);
+            AddressType _item = _mapper.Map<AddressType>(_addressTypeDTO);
+            _item.AddressTypeId = null;      //  Force a new PK to be created
+            _context.AddressTypes.Add(_item);
             await _context.SaveChangesAsync();
 
-            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.GenderId }, _item);
+            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.AddressTypeId }, _item);
             return Ok(ret);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var gender = await _context.Genders.FindAsync(id);
-            if (gender == null)
+            var addressType = await _context.AddressTypes.FindAsync(id);
+            if (addressType == null)
             {
                 return NotFound();
             }
 
-            _context.Genders.Remove(gender);
+            _context.AddressTypes.Remove(addressType);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -125,9 +125,11 @@ namespace WebRest.Controllers
 
         private bool Exists(string id)
         {
-            return _context.Genders.Any(e => e.GenderId == id);
+            return _context.AddressTypes.Any(e => e.AddressTypeId == id);
         }
 
 
     }
+
+
 }

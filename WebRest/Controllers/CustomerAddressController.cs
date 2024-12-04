@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,44 +17,45 @@ namespace WebRest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddressController : ControllerBase, iController<Address, AddressDTO>
+    public class CustomerAddressController : ControllerBase, iController<CustomerAddress, CustomerAddressDTO>
+    // GET: CustomerAddressController
     {
         private readonly WebRestOracleContext _context;
         private readonly IMapper _mapper;
 
-        public AddressController(WebRestOracleContext context,
+        public CustomerAddressController(WebRestOracleContext context,
             IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            // _context.LoggedInUserId = "XYZ";
+           // _context.LoggedInUserId = "XYZ";
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Address>>> Get()
+        public async Task<ActionResult<IEnumerable<CustomerAddress>>> Get()
         {
-            return await _context.Addresses.ToListAsync();
+            return await _context.CustomerAddresses.ToListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Address>> Get(string id)
+        public async Task<ActionResult<CustomerAddress>> Get(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
+            var customerAddress = await _context.CustomerAddresses.FindAsync(id);
 
-            if (address == null)
+            if (customerAddress == null)
             {
                 return NotFound();
             }
 
-            return address;
+            return customerAddress;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, AddressDTO _addressDTO)
+        public async Task<IActionResult> Put(string id, CustomerAddressDTO _customerAddressDTO)
         {
 
-            if (id != _addressDTO.AddressId)
+            if (id != _customerAddressDTO.CustomerAddressId)
             {
                 return BadRequest();
             }
@@ -66,8 +67,8 @@ namespace WebRest.Controllers
                 //_context.SetUserID(_context.LoggedInUserId);
 
                 //  POJO code goes here                
-                var _item = _mapper.Map<Address>(_addressDTO);
-                _context.Addresses.Update(_item);
+                var _item = _mapper.Map<CustomerAddress>(_customerAddressDTO);
+                _context.CustomerAddresses.Update(_item);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -83,7 +84,7 @@ namespace WebRest.Controllers
                         throw;
                     }
                 }
-
+                
                 await transaction.CommitAsync();
             }
             catch (Exception e)
@@ -97,27 +98,27 @@ namespace WebRest.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Address>> Post(AddressDTO _addressDTO)
+        public async Task<ActionResult<CustomerAddress>> Post(CustomerAddressDTO _customerAddressDTO)
         {
-            Address _item = _mapper.Map<Address>(_addressDTO);
-            _item.AddressId = null;      //  Force a new PK to be created
-            _context.Addresses.Add(_item);
+            CustomerAddress _item = _mapper.Map<CustomerAddress>(_customerAddressDTO);
+            _item.CustomerAddressId = null;      //  Force a new PK to be created
+            _context.CustomerAddresses.Add(_item);
             await _context.SaveChangesAsync();
 
-            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.AddressId }, _item);
+            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.CustomerAddressId }, _item);
             return Ok(ret);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var customerAddress = await _context.CustomerAddresses.FindAsync(id);
+            if (customerAddress == null)
             {
                 return NotFound();
             }
 
-            _context.Addresses.Remove(address);
+            _context.CustomerAddresses.Remove(customerAddress);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -125,9 +126,11 @@ namespace WebRest.Controllers
 
         private bool Exists(string id)
         {
-            return _context.Addresses.Any(e => e.AddressId == id);
+            return _context.CustomerAddresses.Any(e => e.CustomerAddressId == id);
         }
 
 
     }
+
+
 }

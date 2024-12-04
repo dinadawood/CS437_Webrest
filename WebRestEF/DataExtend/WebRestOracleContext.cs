@@ -12,7 +12,7 @@ namespace WebRestEF.EF.Data;
 public partial class WebRestOracleContext : DbContext
 {
     public string LoggedInUserId { get; set; }
-    public string DefaultSchema { get; set; } = "LAB3";
+    public string DefaultSchema { get; set; } = "UD_DDAWOOD";
 
     public void SetUserID(string UserID)
     {

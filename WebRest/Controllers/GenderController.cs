@@ -14,47 +14,51 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.ConstrainedExecution;
 using WebRestShared.DTO;
 namespace WebRest.Controllers
+
+// "FREEPDB1OracleConnection": "Data Source=FREEPDB1;User ID=UD_DDAWOOD;Proxy User ID=/;Connection Timeout=60;Connection Lifetime=10;Max Pool Size=2;Min Pool Size=0;Pooling=false;"
+// "FREEPDB1OracleConnection": "Data Source=54.167.36.214:1521/FREEPDB1;User ID=UD_DDAWOOD;Password=UD_DDAWOOD;Connection Timeout=60;Connection Lifetime=10;Max Pool Size=2;Min Pool Size=0;Pooling=false;"
+
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddressController : ControllerBase, iController<Address, AddressDTO>
+    public class GenderController : ControllerBase, iController<Gender, GenderDTO>
     {
         private readonly WebRestOracleContext _context;
         private readonly IMapper _mapper;
 
-        public AddressController(WebRestOracleContext context,
+        public GenderController(WebRestOracleContext context,
             IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            // _context.LoggedInUserId = "XYZ";
+           // _context.LoggedInUserId = "XYZ";
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Address>>> Get()
+        public async Task<ActionResult<IEnumerable<Gender>>> Get()
         {
-            return await _context.Addresses.ToListAsync();
+            return await _context.Genders.ToListAsync();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Address>> Get(string id)
+        public async Task<ActionResult<Gender>> Get(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
+            var gender = await _context.Genders.FindAsync(id);
 
-            if (address == null)
+            if (gender == null)
             {
                 return NotFound();
             }
 
-            return address;
+            return gender;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, AddressDTO _addressDTO)
+        public async Task<IActionResult> Put(string id, GenderDTO _genderDTO)
         {
 
-            if (id != _addressDTO.AddressId)
+            if (id != _genderDTO.GenderId)
             {
                 return BadRequest();
             }
@@ -66,8 +70,8 @@ namespace WebRest.Controllers
                 //_context.SetUserID(_context.LoggedInUserId);
 
                 //  POJO code goes here                
-                var _item = _mapper.Map<Address>(_addressDTO);
-                _context.Addresses.Update(_item);
+                var _item = _mapper.Map<Gender>(_genderDTO);
+                _context.Genders.Update(_item);
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -83,7 +87,7 @@ namespace WebRest.Controllers
                         throw;
                     }
                 }
-
+                
                 await transaction.CommitAsync();
             }
             catch (Exception e)
@@ -97,27 +101,27 @@ namespace WebRest.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Address>> Post(AddressDTO _addressDTO)
+        public async Task<ActionResult<Gender>> Post(GenderDTO _genderDTO)
         {
-            Address _item = _mapper.Map<Address>(_addressDTO);
-            _item.AddressId = null;      //  Force a new PK to be created
-            _context.Addresses.Add(_item);
+            Gender _item = _mapper.Map<Gender>(_genderDTO);
+            _item.GenderId = null;      //  Force a new PK to be created
+            _context.Genders.Add(_item);
             await _context.SaveChangesAsync();
 
-            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.AddressId }, _item);
+            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.GenderId }, _item);
             return Ok(ret);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var address = await _context.Addresses.FindAsync(id);
-            if (address == null)
+            var gender = await _context.Genders.FindAsync(id);
+            if (gender == null)
             {
                 return NotFound();
             }
 
-            _context.Addresses.Remove(address);
+            _context.Genders.Remove(gender);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -125,7 +129,7 @@ namespace WebRest.Controllers
 
         private bool Exists(string id)
         {
-            return _context.Addresses.Any(e => e.AddressId == id);
+            return _context.Genders.Any(e => e.GenderId == id);
         }
 
 

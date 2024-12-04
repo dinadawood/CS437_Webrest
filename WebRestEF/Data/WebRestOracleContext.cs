@@ -39,7 +39,7 @@ public partial class WebRestOracleContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .HasDefaultSchema("LAB3")
+            .HasDefaultSchema("UD_DDAWOOD")
             .UseCollation("USING_NLS_COMP");
 
         modelBuilder.Entity<Address>(entity =>
