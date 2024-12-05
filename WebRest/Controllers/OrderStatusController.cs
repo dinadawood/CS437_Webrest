@@ -101,7 +101,7 @@ namespace WebRest.Controllers
         public async Task<ActionResult<OrderStatus>> Post(OrderStatusDTO _orderStatusDTO)
         {
             OrderStatus _item = _mapper.Map<OrderStatus>(_orderStatusDTO);
-            _item.OrderStateId = null;      //  Force a new PK to be created
+            _item.OrderStatusId = null;      //  Force a new PK to be created
             _context.OrderStatuses.Add(_item);
             await _context.SaveChangesAsync();
 

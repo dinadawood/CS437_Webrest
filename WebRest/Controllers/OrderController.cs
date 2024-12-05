@@ -55,7 +55,7 @@ namespace WebRest.Controllers
         public async Task<IActionResult> Put(string id, OrderDTO _orderDTO)
         {
 
-            if (id != _orderDTO.OrderId)
+            if (id != _orderDTO.OrdersId)
             {
                 return BadRequest();
             }
@@ -101,11 +101,11 @@ namespace WebRest.Controllers
         public async Task<ActionResult<Order>> Post(OrderDTO _orderDTO)
         {
             Order _item = _mapper.Map<Order>(_orderDTO);
-            _item.OrderId = null;      //  Force a new PK to be created
+            _item.OrdersId = null;      //  Force a new PK to be created
             _context.Orders.Add(_item);
             await _context.SaveChangesAsync();
 
-            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.OrderId }, _item);
+            CreatedAtActionResult ret = CreatedAtAction("Get", new { id = _item.OrdersId }, _item);
             return Ok(ret);
         }
 
@@ -126,7 +126,7 @@ namespace WebRest.Controllers
 
         private bool Exists(string id)
         {
-            return _context.Orders.Any(e => e.OrderId == id);
+            return _context.Orders.Any(e => e.OrdersId == id);
         }
 
 

@@ -7,7 +7,7 @@ namespace WebRestShared.DTO
 {
     public partial class OrderDTO
     {
-        public string OrderId { get; set; } = null!;
+        public string OrdersId { get; set; } = null!;
 
         public DateTime OrderDate { get; set; }
 

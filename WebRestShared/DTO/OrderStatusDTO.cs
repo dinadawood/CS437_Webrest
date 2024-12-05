@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebRestShared.DTO
 {
-    public partial class OrderStateDTO
+    public partial class OrderStatusDTO
     {
         public string OrderStatusId { get; set; } = null!;
 
