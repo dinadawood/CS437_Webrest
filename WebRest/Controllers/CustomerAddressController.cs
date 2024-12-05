@@ -18,7 +18,6 @@ namespace WebRest.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerAddressController : ControllerBase, iController<CustomerAddress, CustomerAddressDTO>
-    // GET: CustomerAddressController
     {
         private readonly WebRestOracleContext _context;
         private readonly IMapper _mapper;
